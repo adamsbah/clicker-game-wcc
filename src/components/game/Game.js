@@ -5,16 +5,20 @@ import StoreBar from "./store/StoreBar";
 import GameOver from "./GameOver";
 import Loading from "../common/Loading";
 import Store from "./store/Store";
-import "./Game.css";
-
+import GameOverSound from "../soundEffects/zapsplat_human_male_voice_says_game_over_004_15729.mp3";
+import FinishHimSound from "../soundEffects/Mortal Kombat  FINISH HIM.mp3";
+import CountdownSound from "../soundEffects/472853__nakamurasensei__countdown-to-fight.mp3";
+import YouWinSound from "../soundEffects/you-win-voice-sound-effect-hd.mp3";
 import axios from "axios";
 import { Route } from "react-router-dom";
+import ReactPlayer from "react-player";
+import "./Game.css";
 
 const HEROKU_API = "https://marvel-fight-api-wcc.herokuapp.com";
-
 export default class Game extends Component {
   state = {
     isGameOver: false,
+    isGameCompleted: false,
     isStoreOpen: false,
     isStart: true,
     coins: 0,
@@ -30,7 +34,7 @@ export default class Game extends Component {
     villains: null,
     timer: 30,
     gamePaused: false,
-    seconds: 1 //this.props.seconds
+    seconds: 3 //this.props.seconds
   };
 
   handleBuyItem = (id, items) => {
@@ -98,9 +102,29 @@ export default class Game extends Component {
   handleUseItem = id => {
     const newInventory = this.state.store.inventory.map(item => {
       if (item._id === id && !item.isUsed) {
+        const hero = document.getElementById("hero");
+        switch (id) {
+          case "5dc02c9c838c5a6413530f09":
+            hero.className = "hero spiderMan";
+            break;
+          case "5dc02ce4838c5a6413530f0b":
+            hero.className = "hero hulk";
+            break;
+          case "5dc02a004ed38263faba066f":
+            hero.className = "hero blackWidow";
+            break;
+          case "5dc0336882efa7678d2ed4ce":
+            hero.className = "hero spiderMan blackSpiderMan";
+        }
         return {
           ...item,
           isUsed: true
+        };
+      }
+      if (item._id !== id && item.isUsed) {
+        return {
+          ...item,
+          isUsed: false
         };
       }
       return item;
@@ -172,34 +196,6 @@ export default class Game extends Component {
     });
   };
 
-  characterIsBought = character => {
-    if (character === "Black-widow") {
-      this.setState({
-        "Black-widow": true
-      });
-    }
-    if (character === "Thor") {
-      this.setState({
-        Thor: true
-      });
-    }
-    if (character === "Spider-man") {
-      this.setState({
-        "Spider-man": true
-      });
-    }
-    if (character === "Hulk") {
-      this.setState({
-        Hulk: true
-      });
-    }
-    if (character === "Ms Marvel") {
-      this.setState({
-        "Ms Marvel": true
-      });
-    }
-  };
-
   removeHealth = () => {
     if (this.state.health > 0) {
       this.setState({
@@ -208,16 +204,18 @@ export default class Game extends Component {
     }
   };
 
-  toggleIsStoreOpen = async () => {
-    await this.setState({
-      isStoreOpen: !this.state.isStoreOpen
+  openStore = () => {
+    this.setState({
+      isStoreOpen: true
     });
-    console.log(this.state.isStoreOpen);
-    if (this.state.isStoreOpen) {
-      clearInterval(this.gameTimer);
-    } else {
-      this.setTimer();
-    }
+    clearInterval(this.gameTimer);
+  };
+
+  exitStore = () => {
+    this.setState({
+      isStoreOpen: false
+    });
+    this.setTimer();
   };
 
   decrementTimer = () => {
@@ -276,6 +274,7 @@ export default class Game extends Component {
       healthDivisor: villains[0].healthDivisor,
       villainImg: villains[0].image
     });
+    console.log(villains[0]);
     document.getElementById(
       "game"
     ).style.backgroundImage = `url(${villains[0].bgSrc})`;
@@ -285,6 +284,7 @@ export default class Game extends Component {
     const urlCharacters = `${url}/store/characters`;
     const urlSkins = `${url}/store/skins`;
     const urlVillains = `${url}/villains`;
+    console.log(urlCharacters);
     Promise.all([
       axios.get(urlCharacters),
       axios.get(urlSkins),
@@ -306,18 +306,46 @@ export default class Game extends Component {
     }
   };
 
-  checkIfGameOver = () => {
+  checkIfGameCompleted = () => {
+    if (
+      this.state.level === 10 &&
+      this.state.health === 0 &&
+      this.state.timer > 0
+    ) {
+      clearInterval(this.gameTimer);
+      this.setState({
+        isGameOver: true,
+        timer: null,
+        isGameCompleted: true
+      });
+      this.audio = new Audio(YouWinSound);
+      this.audio.play();
+    }
+  };
+
+  checkIfTimeOver = () => {
     if (this.state.timer === 0 && this.state.health > 0) {
       clearInterval(this.gameTimer);
       this.setState({
         isGameOver: true,
         timer: null
       });
+      this.audio = new Audio(GameOverSound);
+      this.audio.play();
     }
   };
 
+  checkIfGameOver = () => {
+    this.checkIfGameCompleted();
+    this.checkIfTimeOver();
+  };
+
   checkIfWin = () => {
-    if (this.state.health === 0 && this.state.level !== 0) {
+    if (
+      this.state.health === 0 &&
+      this.state.level !== 0 &&
+      this.state.level < 10
+    ) {
       this.setState({
         ...this.state,
         level: this.state.level + 1,
@@ -335,6 +363,8 @@ export default class Game extends Component {
 
   componentDidMount = () => {
     this.fetchGameData(HEROKU_API);
+    this.audio = new Audio(CountdownSound);
+    this.audio.play();
     this.startTimer = setInterval(this.tick, 1000);
     setTimeout(() => {
       this.setTimer();
@@ -344,6 +374,8 @@ export default class Game extends Component {
   componentDidUpdate = () => {
     this.checkIfGameOver();
     this.checkIfWin();
+    this.finishHim();
+    this.checkIfGameCompleted();
   };
 
   componentWillUnmount = () => {
@@ -351,8 +383,8 @@ export default class Game extends Component {
   };
 
   tick = () => {
-    if (this.state.seconds < 3) {
-      this.setState({ seconds: this.state.seconds + 1 });
+    if (this.state.seconds > 1) {
+      this.setState({ seconds: this.state.seconds - 1 });
     } else {
       clearInterval(this.startTimer);
       this.setState({ seconds: "Fight !" });
@@ -361,6 +393,16 @@ export default class Game extends Component {
       setTimeout(() => {
         fight.style.display = "none";
       }, 1000);
+    }
+  };
+
+  finishHim = () => {
+    if (this.state.health === 10) {
+      this.audio = new Audio(FinishHimSound);
+      this.audio.play();
+      setTimeout(() => {
+        this.audio.pause();
+      }, 2000);
     }
   };
 
@@ -393,9 +435,13 @@ export default class Game extends Component {
           <h1 id="fight">{this.state.seconds} </h1>
         </div>
 
-        {this.state.isGameOver ? <GameOver /> : <></>}
+        {this.state.isGameOver ? (
+          <GameOver isGameCompleted={this.state.isGameCompleted} />
+        ) : (
+          <></>
+        )}
 
-        <StoreBar handleClick={this.toggleIsStoreOpen} />
+        <StoreBar handleClick={this.openStore} />
         <Route
           path="/game/store/:section"
           render={props => (
@@ -403,12 +449,19 @@ export default class Game extends Component {
               section={props.match.params.section}
               store={this.state.store}
               coins={this.state.coins}
-              handleExitStore={this.toggleIsStoreOpen}
+              handleExitStore={this.exitStore}
               handleClick={this.handleClickStoreBtn}
               removeCoins={this.removeCoins}
               characterIsBought={this.characterIsBought}
             />
           )}
+        />
+        <ReactPlayer
+          url="https://www.youtube.com/watch?v=KnslNk8HIaI"
+          playing={true}
+          width="0"
+          height="0"
+          volume="0.3"
         />
       </div>
     );

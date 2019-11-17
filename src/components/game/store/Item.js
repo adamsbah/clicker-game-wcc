@@ -1,4 +1,5 @@
 import React from "react";
+import './Item.css'
 
 const Item = ({ id, name, type, imgSrc, isBought, isUsed, handleClick }) => {
   const handleClickBtn = () => {
@@ -17,8 +18,8 @@ const Item = ({ id, name, type, imgSrc, isBought, isUsed, handleClick }) => {
             ? "Bought"
             : "Hire"
           : isUsed
-          ? "Using"
-          : "Not used"}
+          ? "Selected"
+          : "select"}
       </button>
     </li>
   );

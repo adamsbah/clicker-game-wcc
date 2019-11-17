@@ -1,18 +1,12 @@
-import React, { Component } from 'react'
-import './Timer.css'
+import React from "react";
+import "./Timer.css";
 
-class Timer extends Component {
+const Timer = ({ timer }) => {
+  return (
+    <span className={timer <= 10 ? `timer money-time` : `timer`}>
+      {timer > 0 ? `${timer} sec` : `time out`}
+    </span>
+  );
+};
 
-    render() {
-       
-        return (
-            <>
-                <span className="timer">
-                {this.props.timer} &nbsp;&nbsp;sec
-                </span>
-            </>
-        )
-    }
-}
-
-export default Timer
+export default Timer;

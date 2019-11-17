@@ -1,10 +1,10 @@
 import React from "react";
 import "./GameOver.css";
 
-const GameOver = () => {
+const GameOver = ({ isGameCompleted }) => {
   return (
     <div id="game-over">
-      <p className="game-over">GAME OVER</p>
+      <p className="game-over">{isGameCompleted ? "YOU WIN" : "GAME OVER"}</p>
     </div>
   );
 };

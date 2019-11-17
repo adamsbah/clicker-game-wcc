@@ -17,7 +17,7 @@ class NavBar extends Component {
 
   render() {
     return (
-      <div className="container">
+      <div className="navBar-container">
         <div className="menu-button" onClick={this.handleMenuButtonClick}>
           <img
             className="icon"
@@ -30,7 +30,7 @@ class NavBar extends Component {
           <ul className="menu-items">
             <Link to="/">
               <li className="menu-list">
-                <span className="menu-link">Homepage</span>
+                <span className="menu-link">Home</span>
               </li>
             </Link>
             <Link to="/game">

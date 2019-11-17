@@ -2,11 +2,7 @@ import React, { Component } from "react";
 import ReactPlayer from "react-player";
 import BtnStart from "./BtnStart";
 import Header from "./Header";
-<<<<<<< HEAD
-import Rules from "../../components/rules/Rules";
-=======
 import Rules from "../rules/Rules";
->>>>>>> test-prod
 import "./Homepage.css";
 
 export default class Homepage extends Component {
@@ -38,11 +34,7 @@ export default class Homepage extends Component {
             playing={true}
             width="0"
             height="0"
-<<<<<<< HEAD
-          /> 
-=======
           />
->>>>>>> test-prod
         </footer>
       </div>
     );

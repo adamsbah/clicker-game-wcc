@@ -10,8 +10,8 @@ import "./Game.css";
 import axios from "axios";
 import { Route } from "react-router-dom";
 
-const LOCALHOST = "http://localhost:5000";
-const IP = "http://192.168.1.223:5000";
+const HEROKU_API = "https://marvel-fight-api-wcc.herokuapp.com";
+
 export default class Game extends Component {
   state = {
     isGameOver: false,
@@ -333,9 +333,8 @@ export default class Game extends Component {
     }
   };
 
-  // Mettre IP à la place de LOCALHOST
   componentDidMount = () => {
-    this.fetchGameData(LOCALHOST);
+    this.fetchGameData(HEROKU_API);
     this.startTimer = setInterval(this.tick, 1000);
     setTimeout(() => {
       this.setTimer();
@@ -350,8 +349,6 @@ export default class Game extends Component {
   componentWillUnmount = () => {
     clearInterval(this.gameTimer);
   };
-
-  //startTimer
 
   tick = () => {
     if (this.state.seconds < 3) {
@@ -389,12 +386,15 @@ export default class Game extends Component {
           villainImg={this.state.villainImg}
           level={this.state.level}
         />
-         <div className="start-game" style={{ width: "100%", textAlign: "center" }}>
-        <h1 id="fight">{this.state.seconds} </h1>
+        <div
+          className="start-game"
+          style={{ width: "100%", textAlign: "center" }}
+        >
+          <h1 id="fight">{this.state.seconds} </h1>
         </div>
-        
+
         {this.state.isGameOver ? <GameOver /> : <></>}
-      
+
         <StoreBar handleClick={this.toggleIsStoreOpen} />
         <Route
           path="/game/store/:section"

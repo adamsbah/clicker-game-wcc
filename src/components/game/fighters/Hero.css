@@ -1,8 +1,8 @@
 .hero {
   width: 150px;
   height: 320px;
-  background: url("https://www.spriters-resource.com/download/54426/") 0 0
-    no-repeat;
+  background: url("https://www.spriters-resource.com/resources/sheets/51/54426.png")
+    0 0 no-repeat;
   position: absolute;
   top: 145px;
   left: 10%;
@@ -10,10 +10,10 @@
 }
 
 .hero-animation {
-    background-position: -730px -320px;
-    width: 250px;
-    height: 300px;
-  }
+  background-position: -730px -320px;
+  width: 250px;
+  height: 300px;
+}
 
 .spiderMan {
   background: url("https://www.spriters-resource.com/resources/sheets/46/48874.png")
@@ -22,10 +22,10 @@
 }
 
 .blackSpiderMan {
-    background: url("https://www.spriters-resource.com/resources/sheets/48/50661.png")
-      0 -220px no-repeat;
-      height: 180px;
-  }
+  background: url("https://www.spriters-resource.com/resources/sheets/48/50661.png")
+    0 -220px no-repeat;
+  height: 180px;
+}
 
 .spiderMan-animation {
   background-position: -150px -220px;
@@ -45,22 +45,20 @@
 }
 
 .blackWidow {
-    background: url("https://www.spriters-resource.com/resources/sheets/45/48218.png")
-      0 -30px no-repeat;
-    height: 240px;
-    width: 235px;
-  }
+  background: url("https://www.spriters-resource.com/resources/sheets/45/48218.png")
+    0 -30px no-repeat;
+  height: 240px;
+  width: 235px;
+}
 
-  .blackWidow-animation {
-    background-position: -643px -223px;
-    width:190px;
-  }
-
-
+.blackWidow-animation {
+  background-position: -643px -223px;
+  width: 190px;
+}
 
 .laser {
-  background: url("https://www.spriters-resource.com/download/54426/") 0px -625px
-    no-repeat;
+  background: url("https://www.spriters-resource.com/resources/sheets/51/54426.png")
+    0px -625px no-repeat;
   width: 0px;
   height: 60px;
   position: absolute;
@@ -134,7 +132,6 @@
   background-position-x: -900px;
 }
 
-
 @media screen and (min-width: 500px) {
   .hero {
     left: 20%;
@@ -161,6 +158,6 @@
     top: 15px;
   }
   .blackwidow {
-      top: 20px;
+    top: 20px;
   }
 }

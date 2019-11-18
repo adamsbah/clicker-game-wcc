@@ -104,16 +104,16 @@ export default class Game extends Component {
       if (item._id === id && !item.isUsed) {
         const hero = document.getElementById("hero");
         switch (id) {
-          case "5dc02c9c838c5a6413530f09":
+          case "5dd180916305f500173777ed":
             hero.className = "hero spiderMan";
             break;
-          case "5dc02ce4838c5a6413530f0b":
+          case "5dd180a56305f500173777ef":
             hero.className = "hero hulk";
             break;
-          case "5dc02a004ed38263faba066f":
+          case "5dd17f204410440017697377":
             hero.className = "hero blackWidow";
             break;
-          case "5dc0336882efa7678d2ed4ce":
+          case "5dd181556305f500173777fa":
             hero.className = "hero spiderMan blackSpiderMan";
         }
         return {
